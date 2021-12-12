@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import cv2
 
 def generate_random_data(height, width, count):
     x, y = zip(*[generate_img_and_mask(height, width) for i in range(0, count)])
@@ -29,7 +30,17 @@ def generate_img_and_mask(height, width):
     arr = add_filled_square(arr, *square_location)
     arr = add_plus(arr, *plus_location)
     arr = np.reshape(arr, (1, height, width)).astype(np.float32)
-
+    should_get_noise = random.randint(0, 1)
+    if should_get_noise:
+      row,col,ch= arr.shape
+      mean = 0
+      var = 0.1
+      sigma = var**0.5
+      gauss = np.random.normal(mean,sigma,(row,col,ch))
+      gauss = gauss.reshape(row,col,ch)
+      arr += gauss
+      arr = arr > 0
+      
     # Create target masks
     masks = np.asarray([
         add_filled_square(np.zeros(shape, dtype=bool), *square_location),

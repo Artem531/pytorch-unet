@@ -32,7 +32,6 @@ class adaConv2d(nn.Module):
 
         if bias:
             self.bias = Parameter(torch.Tensor(out_channels))
-
         self.reset_parameters()
 
     def manual_conv(self, inp, kernel_size, stride, padding,  dilation, scales):
@@ -41,7 +40,6 @@ class adaConv2d(nn.Module):
         :param scales: scales for patches
         :return: new feature map
         """
-
         unfold = nn.Unfold(kernel_size=kernel_size, dilation=dilation, padding=padding, stride=stride)
 
         Hin = inp.shape[2]
@@ -76,7 +74,6 @@ class adaConv2d(nn.Module):
 
         # restore new feature map
         output = out_unf.view(inp.shape[0], self.weight.shape[0], Hout, Wout)
-
         return output
 
     def reset_parameters(self) -> None:
@@ -85,15 +82,11 @@ class adaConv2d(nn.Module):
         :return:
         """
         nn.init.xavier_uniform(self.weight)
-
         if self.bias is not None:
             nn.init.constant_(self.bias.data, 0)
 
-
     def forward(self, input, scales=1):
         return self.manual_conv(input, self.kernel_size, self.stride, self.padding,  self.dilation, scales=scales)
-
-
 
 def get_inference_time(model, device):
     """
@@ -129,7 +122,6 @@ def get_inference_time(model, device):
 if __name__ == "__main__":
     torch.manual_seed(0)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
     rand_t = torch.rand(5, 3, 256, 256).to(device)
 
     test_conv1 = nn.Conv2d(3, 64, kernel_size=3, dilation=1, padding=0, stride=1).to(device)
@@ -144,5 +136,3 @@ if __name__ == "__main__":
 
     res = test_conv(rand_t)
     print(torch.sum(res))
-
-

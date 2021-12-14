@@ -8,7 +8,7 @@ def generate_random_data(height, width, count):
     X = np.asarray(x) * 255
     X = X.repeat(3, axis=1).transpose([0, 2, 3, 1]).astype(np.uint8)
     Y = np.asarray(y)
-
+    
     return X, Y
 
 def generate_img_and_mask(height, width):
@@ -32,14 +32,14 @@ def generate_img_and_mask(height, width):
     arr = np.reshape(arr, (1, height, width)).astype(np.float32)
     should_get_noise = random.randint(0, 1)
     if should_get_noise:
-      row,col,ch= arr.shape
-      mean = 0
-      var = 0.1
-      sigma = var**0.5
-      gauss = np.random.normal(mean,sigma,(row,col,ch))
-      gauss = gauss.reshape(row,col,ch)
-      arr += gauss
-      arr = arr > 0
+        row,col,ch= arr.shape
+        mean = 0
+        var = 0.1
+        sigma = var**0.5
+        gauss = np.random.normal(mean,sigma,(row,col,ch))
+        gauss = gauss.reshape(row,col,ch)
+        arr += gauss
+        arr = arr > 0
       
     # Create target masks
     masks = np.asarray([
